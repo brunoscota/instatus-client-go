@@ -6,7 +6,7 @@ type Component struct {
 	Name        *string `json:"name"`
 	Description *string `json:"description,omitempty"`
 	Status      *string `json:"status,omitempty"`
-	Order       *int    `json:"order,omitempty"`
+	Order       *int64  `json:"order,omitempty"`
 	GroupID     *string `json:"group_id,omitempty"`
 	ShowUptime  *bool   `json:"show_uptime,omitempty"`
 	Grouped     *bool   `json:"grouped,omitempty"`
@@ -19,7 +19,7 @@ type ComponentFull struct {
 	UniqueEmail *string `json:"unique_email,omitempty"`
 }
 
-func CreateComponent(client *Client, pageID string, component *Component) (*ComponentFull, error) {
+func (client *Client) CreateComponent(pageID string, component *Component) (*ComponentFull, error) {
 	var c ComponentFull
 	err := createResource(
 		client,
@@ -32,14 +32,14 @@ func CreateComponent(client *Client, pageID string, component *Component) (*Comp
 	return &c, err
 }
 
-func GetComponent(client *Client, pageID string, componentID string) (*ComponentFull, error) {
+func (client *Client) GetComponent(pageID string, componentID string) (*ComponentFull, error) {
 	var c ComponentFull
 	err := readResource(client, pageID, componentID, resourceName, &c)
 
 	return &c, err
 }
 
-func UpdateComponent(client *Client, pageID, componentID string, component *Component) (*ComponentFull, error) {
+func (client *Client) UpdateComponent(pageID, componentID string, component *Component) (*ComponentFull, error) {
 	var c ComponentFull
 
 	err := updateResource(
@@ -54,6 +54,6 @@ func UpdateComponent(client *Client, pageID, componentID string, component *Comp
 	return &c, err
 }
 
-func DeleteComponent(client *Client, pageID, componentID string) (err error) {
+func (client *Client) DeleteComponent(pageID, componentID string) (err error) {
 	return deleteResource(client, pageID, resourceName, componentID)
 }

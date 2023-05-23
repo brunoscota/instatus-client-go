@@ -24,7 +24,7 @@ type TemplateFull struct {
 	CreatedAt *string `json:"created_at"`
 }
 
-func CreateTemplate(client *Client, pageID string, template *Template) (*TemplateFull, error) {
+func (client *Client) CreateTemplate(pageID string, template *Template) (*TemplateFull, error) {
 	var i TemplateFull
 	err := createResource(
 		client,
@@ -37,14 +37,14 @@ func CreateTemplate(client *Client, pageID string, template *Template) (*Templat
 	return &i, err
 }
 
-func GetTemplate(client *Client, pageID, templateID string) (*TemplateFull, error) {
+func (client *Client) GetTemplate(pageID, templateID string) (*TemplateFull, error) {
 	var i TemplateFull
 	err := readResource(client, pageID, templateID, resourceName, &i)
 
 	return &i, err
 }
 
-func UpdateTemplate(client *Client, pageID, templateID string, template *Template) (*TemplateFull, error) {
+func (client *Client) UpdateTemplate(pageID, templateID string, template *Template) (*TemplateFull, error) {
 	var i TemplateFull
 
 	err := updateResource(
@@ -59,6 +59,6 @@ func UpdateTemplate(client *Client, pageID, templateID string, template *Templat
 	return &i, err
 }
 
-func DeleteTemplate(client *Client, pageID, templateID string) (err error) {
+func (client *Client) DeleteTemplate(pageID, templateID string) (err error) {
 	return deleteResource(client, pageID, resourceName, templateID)
 }
