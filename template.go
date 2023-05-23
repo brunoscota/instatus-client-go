@@ -28,6 +28,7 @@ func (client *Client) CreateTemplate(pageID string, template *Template) (*Templa
 	var i TemplateFull
 	err := createResource(
 		client,
+		1,
 		pageID,
 		templateName,
 		template,
@@ -39,7 +40,7 @@ func (client *Client) CreateTemplate(pageID string, template *Template) (*Templa
 
 func (client *Client) GetTemplate(pageID, templateID string) (*TemplateFull, error) {
 	var i TemplateFull
-	err := readResource(client, pageID, templateID, templateName, &i)
+	err := readResource(client, 1, pageID, templateID, templateName, &i)
 
 	return &i, err
 }
@@ -49,6 +50,7 @@ func (client *Client) UpdateTemplate(pageID, templateID string, template *Templa
 
 	err := updateResource(
 		client,
+		1,
 		pageID,
 		templateName,
 		templateID,
@@ -60,5 +62,5 @@ func (client *Client) UpdateTemplate(pageID, templateID string, template *Templa
 }
 
 func (client *Client) DeleteTemplate(pageID, templateID string) (err error) {
-	return deleteResource(client, pageID, templateName, templateID)
+	return deleteResource(client, 1, pageID, templateName, templateID)
 }
