@@ -23,7 +23,6 @@ func (client *Client) CreateComponent(pageID string, component *Component) (*Com
 	var c ComponentFull
 	err := createResource(
 		client,
-		1,
 		pageID,
 		componentName,
 		component,
@@ -35,7 +34,7 @@ func (client *Client) CreateComponent(pageID string, component *Component) (*Com
 
 func (client *Client) GetComponent(pageID string, componentID string) (*ComponentFull, error) {
 	var c ComponentFull
-	err := readResource(client, 1, pageID, componentID, componentName, &c)
+	err := readResource(client, pageID, componentID, componentName, &c)
 
 	return &c, err
 }
@@ -45,7 +44,6 @@ func (client *Client) UpdateComponent(pageID string, componentID string, compone
 
 	err := updateResource(
 		client,
-		1,
 		pageID,
 		componentName,
 		componentID,
@@ -57,5 +55,5 @@ func (client *Client) UpdateComponent(pageID string, componentID string, compone
 }
 
 func (client *Client) DeleteComponent(pageID string, componentID string) (err error) {
-	return deleteResource(client, 1, pageID, componentName, componentID)
+	return deleteResource(client, pageID, componentName, componentID)
 }

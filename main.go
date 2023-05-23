@@ -10,7 +10,7 @@ import (
 	"time"
 )
 
-const apiRoot = "https://api.instatus.com"
+const apiRoot = "https://api.instatus.com/v1"
 
 // HTTPClient is the http wrapper for the application
 type HTTPClient interface {
@@ -72,8 +72,8 @@ func (client *Client) doHTTPRequest(method, endpoint string, item interface{}) (
 	return resp, err
 }
 
-func createResource(client IClient, versionApi string, pageID, resourceType string, resource, result interface{}) error {
-	return createResourceCustomURL(client, "/v"+versionApi+"/"+pageID+"/"+resourceType+"s", resource, result)
+func createResource(client IClient, pageID, resourceType string, resource, result interface{}) error {
+	return createResourceCustomURL(client, "/"+pageID+"/"+resourceType+"s", resource, result)
 }
 
 func createResourceCustomURL(client IClient, URL string, resource, result interface{}) error {
@@ -98,10 +98,10 @@ func createResourceCustomURL(client IClient, URL string, resource, result interf
 	return fmt.Errorf("failed creating resource, request returned %d, full response: %+v", resp.StatusCode, resp)
 }
 
-func readResource(client IClient, versionApi string, pageID string, ID string, resourceType string, target interface{}) error {
+func readResource(client IClient, pageID string, ID string, resourceType string, target interface{}) error {
 	resp, err := client.doHTTPRequest(
 		"GET",
-		"/v"+versionApi+"/pages/"+pageID+"/"+resourceType+"s/"+ID,
+		"v"+versionApi+"/pages/"+pageID+"/"+resourceType+"s/"+ID,
 		nil,
 	)
 	if err != nil {
@@ -128,10 +128,10 @@ func readResource(client IClient, versionApi string, pageID string, ID string, r
 	}
 }
 
-func updateResource(client IClient, versionApi string, pageID, resourceType, ID string, resource interface{}, result interface{}) error {
+func updateResource(client IClient, pageID, resourceType, ID string, resource interface{}, result interface{}) error {
 	resp, err := client.doHTTPRequest(
 		"PATCH",
-		"/v"+versionApi+"/"+pageID+"/"+resourceType+"s/"+ID,
+		"/"+pageID+"/"+resourceType+"s/"+ID,
 		resource,
 	)
 	if err != nil {
@@ -151,10 +151,10 @@ func updateResource(client IClient, versionApi string, pageID, resourceType, ID 
 	return fmt.Errorf("failed updating %s, request returned %d", resourceType, resp.StatusCode)
 }
 
-func deleteResource(client IClient, versionApi string, pageID, resourceType, ID string) error {
+func deleteResource(client IClient, pageID, resourceType, ID string) error {
 	resp, err := client.doHTTPRequest(
 		"DELETE",
-		"/v"+versionApi+"/"+pageID+"/"+resourceType+"s/"+ID,
+		"/"+pageID+"/"+resourceType+"s/"+ID,
 		nil,
 	)
 	if err != nil {
