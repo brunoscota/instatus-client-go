@@ -1,6 +1,6 @@
 package instatus
 
-const resourceName = "component"
+const componentName = "component"
 
 type Component struct {
 	Name        *string `json:"name"`
@@ -24,7 +24,7 @@ func (client *Client) CreateComponent(pageID string, component *Component) (*Com
 	err := createResource(
 		client,
 		pageID,
-		resourceName,
+		componentName,
 		component,
 		&c,
 	)
@@ -34,7 +34,7 @@ func (client *Client) CreateComponent(pageID string, component *Component) (*Com
 
 func (client *Client) GetComponent(pageID string, componentID string) (*ComponentFull, error) {
 	var c ComponentFull
-	err := readResource(client, pageID, componentID, resourceName, &c)
+	err := readResource(client, pageID, componentID, componentName, &c)
 
 	return &c, err
 }
@@ -45,7 +45,7 @@ func (client *Client) UpdateComponent(pageID string, componentID string, compone
 	err := updateResource(
 		client,
 		pageID,
-		resourceName,
+		componentName,
 		componentID,
 		component,
 		&c,
@@ -55,5 +55,5 @@ func (client *Client) UpdateComponent(pageID string, componentID string, compone
 }
 
 func (client *Client) DeleteComponent(pageID string, componentID string) (err error) {
-	return deleteResource(client, pageID, resourceName, componentID)
+	return deleteResource(client, pageID, componentName, componentID)
 }

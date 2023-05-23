@@ -1,6 +1,6 @@
 package instatus
 
-const resourceName = "template"
+const templateName = "template"
 
 type Template struct {
 	Name        *string      `json:"name"`
@@ -19,7 +19,7 @@ type Components struct {
 }
 
 type TemplateFull struct {
-	IncidentTemplate
+	Template
 	ID        *string `json:"id"`
 	CreatedAt *string `json:"created_at"`
 }
@@ -29,7 +29,7 @@ func (client *Client) CreateTemplate(pageID string, template *Template) (*Templa
 	err := createResource(
 		client,
 		pageID,
-		resourceName,
+		templateName,
 		template,
 		&i,
 	)
@@ -39,7 +39,7 @@ func (client *Client) CreateTemplate(pageID string, template *Template) (*Templa
 
 func (client *Client) GetTemplate(pageID, templateID string) (*TemplateFull, error) {
 	var i TemplateFull
-	err := readResource(client, pageID, templateID, resourceName, &i)
+	err := readResource(client, pageID, templateID, templateName, &i)
 
 	return &i, err
 }
@@ -50,7 +50,7 @@ func (client *Client) UpdateTemplate(pageID, templateID string, template *Templa
 	err := updateResource(
 		client,
 		pageID,
-		resourceName,
+		templateName,
 		templateID,
 		template,
 		&i,
@@ -60,5 +60,5 @@ func (client *Client) UpdateTemplate(pageID, templateID string, template *Templa
 }
 
 func (client *Client) DeleteTemplate(pageID, templateID string) (err error) {
-	return deleteResource(client, pageID, resourceName, templateID)
+	return deleteResource(client, pageID, templateName, templateID)
 }
