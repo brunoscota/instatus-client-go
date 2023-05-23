@@ -101,7 +101,7 @@ func createResourceCustomURL(client IClient, URL string, resource, result interf
 func readResource(client IClient, pageID string, ID string, resourceType string, target interface{}) error {
 	resp, err := client.doHTTPRequest(
 		"GET",
-		"v"+versionApi+"/pages/"+pageID+"/"+resourceType+"s/"+ID,
+		"/pages/"+pageID+"/"+resourceType+"s/"+ID,
 		nil,
 	)
 	if err != nil {
