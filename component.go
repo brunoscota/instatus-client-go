@@ -39,7 +39,7 @@ func (client *Client) GetComponent(pageID string, componentID string) (*Componen
 	return &c, err
 }
 
-func (client *Client) UpdateComponent(pageID, componentID string, component *Component) (*ComponentFull, error) {
+func (client *Client) UpdateComponent(pageID string, componentID string, component *Component) (*ComponentFull, error) {
 	var c ComponentFull
 
 	err := updateResource(
@@ -54,6 +54,6 @@ func (client *Client) UpdateComponent(pageID, componentID string, component *Com
 	return &c, err
 }
 
-func (client *Client) DeleteComponent(pageID, componentID string) (err error) {
+func (client *Client) DeleteComponent(pageID string, componentID string) (err error) {
 	return deleteResource(client, pageID, resourceName, componentID)
 }
