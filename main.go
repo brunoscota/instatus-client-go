@@ -137,34 +137,6 @@ func readResource(client IClient, pageID string, ID string, resourceType string,
 	)
 }
 
-//resp, err := client.doHTTPRequest(
-//"GET",
-//"/"+pageID+"/"+resourceType+"s/"+ID,
-//nil,
-//)
-//if err != nil {
-//return err
-//}
-//
-//if resp.Body != nil {
-//defer resp.Body.Close()
-//}
-//
-//switch resp.StatusCode {
-//case http.StatusOK:
-//bodyBytes, err := ioutil.ReadAll(resp.Body)
-//if err != nil {
-//return err
-//}
-//return json.Unmarshal(bodyBytes, target)
-//
-//case http.StatusNotFound:
-//return nil
-//
-//default:
-//return fmt.Errorf("could not find %s with ID: %s, http status %d", resourceType, ID, resp.StatusCode)
-//}
-
 func updateResourceCustomURL(client IClient, url string, errorMessage string, resource interface{}, result interface{}) error {
 	resp, err := client.doHTTPRequest(
 		"PUT",
@@ -198,10 +170,10 @@ func updateResource(client IClient, pageID string, resourceType string, ID strin
 	)
 }
 
-func deleteResourceCustomURL(client IClient, url string, errorMessage string, ID string) error {
+func deleteResourceCustomURL(client IClient, url string, errorMessage string) error {
 	resp, err := client.doHTTPRequest(
 		"DELETE",
-		"/"+pageID+"/"+resourceType+"s/"+ID,
+		url,
 		nil,
 	)
 	if err != nil {
@@ -213,23 +185,9 @@ func deleteResourceCustomURL(client IClient, url string, errorMessage string, ID
 		return nil
 	}
 
-	return fmt.Errorf("failed deleting %s, request returned %d", resourceType, resp.StatusCode)
+	return fmt.Errorf("failed deleting %s, request returned %d", errorMessage, resp.StatusCode)
 }
 
 func deleteResource(client IClient, pageID string, resourceType string, ID string) error {
-	resp, err := client.doHTTPRequest(
-		"DELETE",
-		"/"+pageID+"/"+resourceType+"s/"+ID,
-		nil,
-	)
-	if err != nil {
-		return err
-	}
-
-	// StatusGroup deletion returns StatusOK instead of StatusNoContent like other resources
-	if resp.StatusCode == http.StatusNoContent || resp.StatusCode == http.StatusOK {
-		return nil
-	}
-
-	return fmt.Errorf("failed deleting %s, request returned %d", resourceType, resp.StatusCode)
+	return deleteResourceCustomURL(client, "/"+pageID+"/"+resourceType+"s/"+ID, resourceType)
 }
