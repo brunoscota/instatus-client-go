@@ -1,6 +1,7 @@
-# Instatus Go SDK
+# Instatus Client Go
 
-Currently Availables resources : 
+Currently available resources : 
 
 - Component
 - Template
+- User

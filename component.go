@@ -7,16 +7,21 @@ type Component struct {
 	Description *string `json:"description,omitempty"`
 	Status      *string `json:"status,omitempty"`
 	Order       *int64  `json:"order,omitempty"`
-	GroupID     *string `json:"group_id,omitempty"`
-	ShowUptime  *bool   `json:"show_uptime,omitempty"`
+	ShowUptime  *bool   `json:"showUptime,omitempty"`
 	Grouped     *bool   `json:"grouped,omitempty"`
 	Group       *string `json:"group,omitempty"`
+}
+
+type Group struct {
+	Name *string `json:"name,omitempty"`
 }
 
 type ComponentFull struct {
 	Component
 	ID          *string `json:"id"`
-	UniqueEmail *string `json:"unique_email,omitempty"`
+	UniqueEmail *string `json:"uniqueEmail,omitempty"`
+	GroupID     *string `json:"groupId,omitempty"`
+	Group       Group   `json:"group,omitempty"`
 }
 
 func (client *Client) CreateComponent(pageID string, component *Component) (*ComponentFull, error) {
@@ -52,6 +57,7 @@ func (client *Client) UpdateComponent(pageID string, componentID string, compone
 	)
 
 	return &c, err
+	//fmt.Errorf("componentId : %s, component name : %s, description : %s", componentID, component.Name, component.Description)
 }
 
 func (client *Client) DeleteComponent(pageID string, componentID string) (err error) {

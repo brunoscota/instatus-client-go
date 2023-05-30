@@ -1,12 +1,12 @@
 package instatus
 
 import (
-	"bytes"
 	"encoding/json"
 	"fmt"
 	"io"
 	"io/ioutil"
 	"net/http"
+	"strings"
 	"time"
 )
 
@@ -50,13 +50,14 @@ func (client *Client) doHTTPRequest(method, endpoint string, item interface{}) (
 			return nil, err
 		}
 
-		body = bytes.NewReader(data)
+		body = strings.NewReader(string(data))
 	}
 	req, err := http.NewRequest(method, url, body)
 	if err != nil {
 		return nil, err
 	}
 	req.Header.Set("Authorization", "Bearer "+client.apiKey)
+	req.Header.Set("Content-Type", "application/json")
 
 	maxRetries := 10
 	retryInterval := 10 * time.Second
@@ -86,7 +87,7 @@ func createResourceCustomURL(client IClient, URL string, resource, result interf
 		return err
 	}
 
-	if resp.StatusCode == http.StatusCreated {
+	if resp.StatusCode == http.StatusCreated || resp.StatusCode == http.StatusOK {
 		defer resp.Body.Close()
 		bodyBytes, err := ioutil.ReadAll(resp.Body)
 		if err != nil {
@@ -98,10 +99,10 @@ func createResourceCustomURL(client IClient, URL string, resource, result interf
 	return fmt.Errorf("failed creating resource, request returned %d, full response: %+v", resp.StatusCode, resp)
 }
 
-func readResource(client IClient, pageID string, ID string, resourceType string, target interface{}) error {
+func readResourceCustomURL(client IClient, url string, errorMessage string, target interface{}) error {
 	resp, err := client.doHTTPRequest(
 		"GET",
-		"/pages/"+pageID+"/"+resourceType+"s/"+ID,
+		url,
 		nil,
 	)
 	if err != nil {
@@ -124,14 +125,50 @@ func readResource(client IClient, pageID string, ID string, resourceType string,
 		return nil
 
 	default:
-		return fmt.Errorf("could not find %s with ID: %s, http status %d", resourceType, ID, resp.StatusCode)
+		return fmt.Errorf("could not find %s, http status %d", errorMessage, resp.StatusCode)
 	}
 }
 
-func updateResource(client IClient, pageID, resourceType, ID string, resource interface{}, result interface{}) error {
+func readResource(client IClient, pageID string, ID string, resourceType string, target interface{}) error {
+	return readResourceCustomURL(
+		client, "/"+pageID+"/"+resourceType+"s/"+ID,
+		fmt.Sprintf("%s with ID: %s", resourceType, ID),
+		target,
+	)
+}
+
+//resp, err := client.doHTTPRequest(
+//"GET",
+//"/"+pageID+"/"+resourceType+"s/"+ID,
+//nil,
+//)
+//if err != nil {
+//return err
+//}
+//
+//if resp.Body != nil {
+//defer resp.Body.Close()
+//}
+//
+//switch resp.StatusCode {
+//case http.StatusOK:
+//bodyBytes, err := ioutil.ReadAll(resp.Body)
+//if err != nil {
+//return err
+//}
+//return json.Unmarshal(bodyBytes, target)
+//
+//case http.StatusNotFound:
+//return nil
+//
+//default:
+//return fmt.Errorf("could not find %s with ID: %s, http status %d", resourceType, ID, resp.StatusCode)
+//}
+
+func updateResourceCustomURL(client IClient, url string, errorMessage string, resource interface{}, result interface{}) error {
 	resp, err := client.doHTTPRequest(
-		"PATCH",
-		"/"+pageID+"/"+resourceType+"s/"+ID,
+		"PUT",
+		url,
 		resource,
 	)
 	if err != nil {
@@ -148,10 +185,38 @@ func updateResource(client IClient, pageID, resourceType, ID string, resource in
 		return json.Unmarshal(bodyBytes, &result)
 	}
 
-	return fmt.Errorf("failed updating %s, request returned %d", resourceType, resp.StatusCode)
+	return fmt.Errorf("failed updating %s, request returned %d", errorMessage, resp.StatusCode)
 }
 
-func deleteResource(client IClient, pageID, resourceType, ID string) error {
+func updateResource(client IClient, pageID string, resourceType string, ID string, resource interface{}, result interface{}) error {
+	return updateResourceCustomURL(
+		client,
+		"/"+pageID+"/"+resourceType+"s/"+ID,
+		fmt.Sprintf("%s with ID: %s", resourceType, ID),
+		resource,
+		result,
+	)
+}
+
+func deleteResourceCustomURL(client IClient, url string, errorMessage string, ID string) error {
+	resp, err := client.doHTTPRequest(
+		"DELETE",
+		"/"+pageID+"/"+resourceType+"s/"+ID,
+		nil,
+	)
+	if err != nil {
+		return err
+	}
+
+	// StatusGroup deletion returns StatusOK instead of StatusNoContent like other resources
+	if resp.StatusCode == http.StatusNoContent || resp.StatusCode == http.StatusOK {
+		return nil
+	}
+
+	return fmt.Errorf("failed deleting %s, request returned %d", resourceType, resp.StatusCode)
+}
+
+func deleteResource(client IClient, pageID string, resourceType string, ID string) error {
 	resp, err := client.doHTTPRequest(
 		"DELETE",
 		"/"+pageID+"/"+resourceType+"s/"+ID,
