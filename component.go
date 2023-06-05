@@ -57,7 +57,6 @@ func (client *Client) UpdateComponent(pageID string, componentID string, compone
 	)
 
 	return &c, err
-	//fmt.Errorf("componentId : %s, component name : %s, description : %s", componentID, component.Name, component.Description)
 }
 
 func (client *Client) DeleteComponent(pageID string, componentID string) (err error) {
