@@ -60,7 +60,7 @@ func (client *Client) doHTTPRequest(method, endpoint string, item interface{}) (
 	req.Header.Set("Content-Type", "application/json")
 
 	maxRetries := 10
-	retryInterval := 10 * time.Second
+	retryInterval := 30 * time.Second
 
 	// Basic Retry logic around rate limiting
 	resp, err = client.httpClient.Do(req)
