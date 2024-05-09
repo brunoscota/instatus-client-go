@@ -10,7 +10,7 @@ import (
 	"time"
 )
 
-const apiRoot = "https://api.instatus.com/v1"
+const apiRoot = "https://api.instatus.com/v2"
 
 // HTTPClient is the http wrapper for the application
 type HTTPClient interface {
@@ -127,6 +127,14 @@ func readResourceCustomURL(client IClient, url string, errorMessage string, targ
 	default:
 		return fmt.Errorf("could not find %s, http status %d", errorMessage, resp.StatusCode)
 	}
+}
+
+func readPageResource(client IClient, ID string, target interface{}) error {
+	return readResourceCustomURL(
+		client, "/pages?page="+ID,
+		fmt.Sprintf("Page with ID: %s", ID),
+		target,
+	)
 }
 
 func readResource(client IClient, pageID string, ID string, resourceType string, target interface{}) error {
