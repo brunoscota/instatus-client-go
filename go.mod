@@ -1,3 +1,3 @@
-module github.com/paydaycay/instatus-client-go
+module github.com/brunoscota/instatus-client-go
 
 go 1.13
