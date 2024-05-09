@@ -22,9 +22,9 @@ func (client *Client) CreatePage(pageID string, page *Page) (*Page, error) {
 }
 
 func (client *Client) GetPage(pageID string) (*Page, error) {
-	var c Page
+	var c []Page
 	err := readPageResource(client, pageID, &c)
-	return &c, err
+	return &c[0], err
 }
 
 func (client *Client) UpdatePage(pageID string, page *Page) (*Page, error) {
