@@ -73,6 +73,10 @@ func (client *Client) doHTTPRequest(method, endpoint string, item interface{}) (
 	return resp, err
 }
 
+func createPageResource(client IClient, resource, result interface{}) error {
+	return createResourceCustomURL(client, "/pages", resource, result)
+}
+
 func createResource(client IClient, pageID, resourceType string, resource, result interface{}) error {
 	return createResourceCustomURL(client, "/"+pageID+"/"+resourceType+"s", resource, result)
 }

@@ -8,12 +8,10 @@ type Page struct {
 	Name      *string `json:"name"`
 }
 
-func (client *Client) CreatePage(pageID string, page *Page) (*Page, error) {
+func (client *Client) CreatePage(pageName string, page *Page) (*Page, error) {
 	var c Page
-	err := createResource(
+	err := createPageResource(
 		client,
-		pageID,
-		pageName,
 		page,
 		&c,
 	)
