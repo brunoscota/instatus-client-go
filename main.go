@@ -10,7 +10,7 @@ import (
 	"time"
 )
 
-const apiRoot = "https://api.instatus.com"
+const apiRoot = "https://api.instatus.com/v1"
 
 // HTTPClient is the http wrapper for the application
 type HTTPClient interface {
@@ -74,11 +74,11 @@ func (client *Client) doHTTPRequest(method, endpoint string, item interface{}) (
 }
 
 func createPageResource(client IClient, resource, result interface{}) error {
-	return createResourceCustomURL(client, "/v1/pages", resource, result)
+	return createResourceCustomURL(client, "/pages", resource, result)
 }
 
 func createResource(client IClient, pageID, resourceType string, resource, result interface{}) error {
-	return createResourceCustomURL(client, "/v1/"+pageID+"/"+resourceType+"s", resource, result)
+	return createResourceCustomURL(client, "/"+pageID+"/"+resourceType+"s", resource, result)
 }
 
 func createResourceCustomURL(client IClient, URL string, resource, result interface{}) error {
