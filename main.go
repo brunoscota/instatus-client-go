@@ -78,7 +78,7 @@ func createPageResource(client IClient, resource, result interface{}) error {
 }
 
 func createResource(client IClient, pageID, resourceType string, resource, result interface{}) error {
-	return createResourceCustomURL(client, "/v2/"+pageID+"/"+resourceType+"s", resource, result)
+	return createResourceCustomURL(client, "/v1/"+pageID+"/"+resourceType+"s", resource, result)
 }
 
 func createResourceCustomURL(client IClient, URL string, resource, result interface{}) error {
