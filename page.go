@@ -3,10 +3,9 @@ package instatus
 const pageName = "page"
 
 type Page struct {
-	ID          *string `json:"id"`
-	Subdomain   *string `json:"subdomain"`
-	Name        *string `json:"name"`
-	PublicEmail *string `json:"publicEmail"`
+	ID        *string `json:"id"`
+	Subdomain *string `json:"subdomain"`
+	Name      *string `json:"name"`
 }
 
 func (client *Client) CreatePage(pageID string, page *Page) (*Page, error) {
@@ -24,7 +23,7 @@ func (client *Client) CreatePage(pageID string, page *Page) (*Page, error) {
 
 func (client *Client) GetPage(pageID string) (*Page, error) {
 	var c Page
-	err := readPageResource(client, pageName, &c)
+	err := readPageResource(client, pageID, &c)
 	return &c, err
 }
 
