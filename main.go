@@ -73,10 +73,6 @@ func (client *Client) doHTTPRequest(method, endpoint string, item interface{}) (
 	return resp, err
 }
 
-func createPageResource(client IClient, resource, result interface{}) error {
-	return createResourceCustomURL(client, "/pages", resource, result)
-}
-
 func createResource(client IClient, pageID, resourceType string, resource, result interface{}) error {
 	return createResourceCustomURL(client, "/"+pageID+"/"+resourceType+"s", resource, result)
 }
@@ -133,17 +129,9 @@ func readResourceCustomURL(client IClient, url string, errorMessage string, targ
 	}
 }
 
-func readPageResource(client IClient, ID string, target interface{}) error {
-	return readResourceCustomURL(
-		client, "/v2/pages?page="+ID,
-		fmt.Sprintf("Page with ID: %s", ID),
-		target,
-	)
-}
-
 func readResource(client IClient, pageID string, ID string, resourceType string, target interface{}) error {
 	return readResourceCustomURL(
-		client, "/v2/"+pageID+"/"+resourceType+"s/"+ID,
+		client, "/"+pageID+"/"+resourceType+"s/"+ID,
 		fmt.Sprintf("%s with ID: %s", resourceType, ID),
 		target,
 	)
@@ -175,7 +163,7 @@ func updateResourceCustomURL(client IClient, url string, errorMessage string, re
 func updateResource(client IClient, pageID string, resourceType string, ID string, resource interface{}, result interface{}) error {
 	return updateResourceCustomURL(
 		client,
-		"/v2/"+pageID+"/"+resourceType+"s/"+ID,
+		"/"+pageID+"/"+resourceType+"s/"+ID,
 		fmt.Sprintf("%s with ID: %s", resourceType, ID),
 		resource,
 		result,
@@ -201,5 +189,5 @@ func deleteResourceCustomURL(client IClient, url string, errorMessage string) er
 }
 
 func deleteResource(client IClient, pageID string, resourceType string, ID string) error {
-	return deleteResourceCustomURL(client, "/v2/"+pageID+"/"+resourceType+"s/"+ID, resourceType)
+	return deleteResourceCustomURL(client, "/"+pageID+"/"+resourceType+"s/"+ID, resourceType)
 }
